@@ -54,7 +54,6 @@ def buscar_vagas_gupy():
     
     url_api = "https://employability-portal.gupy.io/api/v1/jobs"
     
-    # ⚠️ CORREÇÃO: Tiramos os colchetes do workplaceTypes
     filtros_de_busca = [
         {"nome": "RIO DE JANEIRO", "params": {'state': 'Rio de Janeiro', 'limit': 10}},
         {"nome": "HOME OFFICE", "params": {'workplaceTypes': 'remote', 'limit': 10}}
@@ -71,7 +70,6 @@ def buscar_vagas_gupy():
         for pagina in range(1, PAGINA_MAXIMA + 1):
             print(f"   ⏳ Lendo página {pagina} de {PAGINA_MAXIMA}...")
             
-            # A matemática do offset continua por baixo dos panos (pág 1 = offset 0, pág 2 = offset 10...)
             offset = (pagina - 1) * 10
             
             params_atuais = filtro['params'].copy()
