@@ -1,4 +1,4 @@
-# 🚀 Gupy Job Tracker: Automação de Vagas no Telegram
+# 🚀 Gupy Job Tracker: Automação de Vagas (RJ & Home Office) no Telegram
 
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/)
 [![Gupy API](https://img.shields.io/badge/Source-Gupy%20API-orange)](https://portal.gupy.io/)
@@ -6,9 +6,9 @@
 
 ## 📖 Sobre o Projeto
 
-Buscar vagas de emprego diariamente é um processo exaustivo e repetitivo. Para resolver esse problema e otimizar meu tempo (e o de centenas de profissionais), desenvolvi este **rpa** em Python. 
+Buscar vagas de emprego diariamente é um processo exaustivo e repetitivo. Para resolver esse problema, desenvolvi este **rpa** em Python. 
 
-O robô atua como um "radar" silencioso: ele monitora a plataforma Gupy 24 horas por dia, captura novas oportunidades de trabalho no Estado do Rio de Janeiro e dispara alertas formatados em tempo real diretamente em um canal do Telegram. Assim, as vagas chegam mastigadas até os candidatos, contendo todas as informações essenciais (Modelo de trabalho, tipo de contrato e acessibilidade para PCD).
+O robô atua como um "radar" silencioso: ele monitora a plataforma Gupy, captura novas oportunidades de trabalho no **Estado do Rio de Janeiro** e vagas **100% Home Office**, e dispara alertas formatados em tempo real diretamente em um canal do Telegram. Assim, as vagas chegam mastigadas até os candidatos.
 
 ---
 
@@ -21,7 +21,7 @@ Quer ver o robô trabalhando ao vivo? Entre no grupo aberto do Telegram que é a
 
 ## 📸 Demonstração do Bot
 
-<img width="911" height="914" alt="image" src="https://github.com/user-attachments/assets/b72a9a11-6467-45e4-a9b9-b6bf26d0791d" />
+<img width="913" height="920" alt="image" src="https://github.com/user-attachments/assets/7e2e0cdc-40ec-4336-986e-383fd6c96e6b" />
 
 
 *Acima: Interface do bot entregando vagas no grupo com formatação amigável.*
@@ -38,19 +38,18 @@ A maioria das automações de Web Scraping utiliza ferramentas que simulam um na
 
 ---
 
-## ⚙️ Como Adaptar para o SEU Estado
+## ⚙️ Como Adaptar para o SEU Estado / Filtro
 
-O código foi criado focado no Rio de Janeiro, mas você pode mudar para qualquer estado do Brasil em segundos.
+O código foi criado para buscar RJ e Home Office, mas você pode mudar para qualquer estado ou adicionar novas buscas.
 
-Abra o arquivo `main.py`, vá até a função `buscar_vagas_gupy_rj()` e localize o dicionário de parâmetros:
+Abra o arquivo `main.py`, vá até a função `buscar_vagas_gupy()` e modifique a lista `filtros_de_busca`:
 
 ```python
-# Altere 'Rio de Janeiro' para o seu estado (ex: 'São Paulo', 'Minas Gerais')
-params = {
-    'state': 'Rio de Janeiro', 
-    'limit': 10,
-    'offset': offset
-}
+# Adicione ou altere os dicionários da lista abaixo
+filtros_de_busca = [
+    {"nome": "SÃO PAULO", "params": {'state': 'São Paulo', 'limit': 10}},
+    {"nome": "HOME OFFICE", "params": {'workplaceTypes': 'remote', 'limit': 10}}
+]
 ```
 
 ---
