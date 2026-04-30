@@ -1,101 +1,144 @@
-# 🚀 Gupy Job Tracker: Automação de Vagas (RJ & Home Office) no Telegram
+# 🤖 Multi-Source Job Tracker: Automação de Vagas para Devs no Telegram
 
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/)
-[![Gupy API](https://img.shields.io/badge/Source-Gupy%20API-orange)](https://portal.gupy.io/)
+[![Sources](https://img.shields.io/badge/Fontes-Gupy%20%7C%20LinkedIn%20%7C%20ProgramaThor-orange)]()
+[![Telegram](https://img.shields.io/badge/Alertas-Telegram-2CA5E0)]()
+[![GitHub Actions](https://img.shields.io/badge/Automação-GitHub%20Actions-181717?logo=github)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+---
 
 ## 📖 Sobre o Projeto
 
-Buscar vagas de emprego diariamente é um processo exaustivo e repetitivo. Para resolver esse problema, desenvolvi este **rpa** em Python. 
+Este projeto começou como um fork do excelente trabalho de [Lucas Nunes](https://github.com/lucasnunestrabalho99-sudo/telegram-vagas-gupy-bot), que criou um bot para monitorar vagas na Gupy para o Rio de Janeiro.
 
-O robô atua como um "radar" silencioso: ele monitora a plataforma Gupy, captura novas oportunidades de trabalho no **Estado do Rio de Janeiro** e vagas **100% Home Office**, e dispara alertas formatados em tempo real diretamente em um canal do Telegram. Assim, as vagas chegam mastigadas até os candidatos.
-
----
-
-## 🎯 Veja rodando na prática
-
-Quer ver o robô trabalhando ao vivo? Entre no grupo aberto do Telegram que é alimentado 100% por esta automação:
-👉 **[Entrar no Grupo: Vagas Gupy | Rio de Janeiro](https://t.me/+20ZgzGruRzJlYjVh)**
+Partindo dessa base, evoluí o projeto para atender minha própria realidade como desenvolvedor Front-End / Full Stack buscando oportunidades em **São Paulo e 100% Remoto**, adicionando múltiplas fontes, filtros de perfil e automação completa via GitHub Actions.
 
 ---
 
-## 📸 Demonstração do Bot
+## ✨ Diferenciais da versão adaptada
 
-<img width="913" height="920" alt="image" src="https://github.com/user-attachments/assets/7e2e0cdc-40ec-4336-986e-383fd6c96e6b" />
+### 🔍 Múltiplas fontes de vagas
+| Fonte | Tipo | Cobertura |
+|---|---|---|
+| 🟣 **Gupy** | API JSON | SP + Remoto |
+| 🔷 **LinkedIn** | API Guest | SP + Remoto |
+| 🟤 **ProgramaThor** | Web Scraping | SP + Remoto |
 
+### 🎯 Filtros inteligentes baseados em perfil
+- **Senioridade:** bloqueia automaticamente vagas Sênior, Especialista, Lead, Staff, Head, Coordenador
+- **Gaps eliminatórios:** bloqueia vagas com Flutter, Dart, .NET, C#, Kafka, Kubernetes, inglês fluente obrigatório, entre outros
+- **Vagas recentes:** limita a vagas publicadas nos últimos 3 dias
+- **Deduplicação dupla:** por URL (banco SQLite) + por título/empresa na sessão
 
-*Acima: Interface do bot entregando vagas no grupo com formatação amigável.*
+### 📊 Score de match por vaga
+Cada alerta chega com um indicador de compatibilidade baseado no stack técnico detectado no título e nas tags da vaga:
+- 🟢 **Alto** — 2+ tecnologias do stack avançado identificadas
+- 🟡 **Médio** — 1 tecnologia identificada
+- 🔵 **Padrão** — sem tech específica no título (ainda relevante)
+
+### ⚙️ Automação completa via GitHub Actions
+Roda automaticamente na nuvem sem precisar de servidor ou PC ligado:
+- **Segunda a sexta:** 8h, 10h, 12h, 14h, 16h, 18h e 20h (BRT)
+- **Sábado e domingo:** 10h, 14h e 18h (BRT)
 
 ---
 
-## 💡 Diferenciais Técnicos (Por que não usei Selenium?)
+## 🚀 Como funciona
 
-A maioria das automações de Web Scraping utiliza ferramentas que simulam um navegador aberto (como Selenium), o que consome muita memória RAM e deixa o processo lento. Este projeto resolve o problema usando uma **abordagem API-First**:
-
-1. **Performance Extrema:** O script intercepta a API oculta que a própria Gupy usa para renderizar as vagas. Ele consome pacotes JSON puros, sendo incrivelmente mais rápido e leve.
-2. **Tratamento de Dados:** A API retorna datas no fuso horário global (UTC) e termos técnicos em inglês. O código faz o *parse* automático, traduzindo para o horário de Brasília e para o português.
-3. **Trava Anti-Spam (SQLite):** Utiliza um banco de dados relacional leve (`vagas_gupy.db`) para memorizar o ID de cada vaga processada. Isso garante que o bot nunca envie a mesma vaga duplicada para o grupo, mesmo que o script seja reiniciado.
-
----
-
-## ⚙️ Como Adaptar para o SEU Estado / Filtro
-
-O código foi criado para buscar RJ e Home Office, mas você pode mudar para qualquer estado ou adicionar novas buscas.
-
-Abra o arquivo `main.py`, vá até a função `buscar_vagas_gupy()` e modifique a lista `filtros_de_busca`:
-
-```python
-# Adicione ou altere os dicionários da lista abaixo
-filtros_de_busca = [
-    {"nome": "SÃO PAULO", "params": {'state': 'São Paulo', 'limit': 10}},
-    {"nome": "HOME OFFICE", "params": {'workplaceTypes': 'remote', 'limit': 10}}
-]
+```
+GitHub Actions (agendado)
+    ↓
+Varre Gupy + LinkedIn + ProgramaThor
+    ↓
+Aplica filtros de perfil (senioridade, gaps, data)
+    ↓
+Calcula score de match com o stack técnico
+    ↓
+Envia alertas formatados no Telegram
+    ↓
+Salva DB atualizado no repositório
 ```
 
 ---
 
-## 🚀 Instalação e Uso Local
+## ⚙️ Como usar / adaptar para o seu perfil
 
 ### 1. Pré-requisitos
-* Python 3.8+ instalado.
-* Um Bot criado no Telegram via [@BotFather](https://t.me/botfather).
+- Python 3.8+
+- Um bot criado no Telegram via [@BotFather](https://t.me/botfather)
+- Conta no GitHub
 
-### 2. Clonando o Repositório
-Abra o terminal e rode os comandos:
+### 2. Clone e configure
+
 ```bash
-git clone [https://github.com/lucasnunestrabalho99-sudo/telegram-vagas-gupy-bot.git](https://github.com/lucasnunestrabalho99-sudo/telegram-vagas-gupy-bot.git)
+git clone https://github.com/pmarsiglia93/telegram-vagas-gupy-bot.git
 cd telegram-vagas-gupy-bot
-```
-
-### 3. Configurando o Ambiente
-Crie um ambiente virtual e instale as bibliotecas necessárias:
-```bash
-python -m venv venv
-
-# No Windows:
-venv\Scripts\activate
-# No Linux/Mac:
-source venv/bin/activate
-
 pip install -r requirements.txt
 ```
 
-### 4. Variáveis de Ambiente
-Crie um arquivo chamado **exatamente** `.env` na raiz do projeto e insira as credenciais do seu robô e do seu grupo:
+Crie um arquivo `.env` na raiz:
 ```env
-TELEGRAM_TOKEN=cole_seu_token_aqui
-CHAT_ID_GRUPO=cole_o_id_do_seu_grupo_aqui
+TELEGRAM_TOKEN=seu_token_aqui
+CHAT_ID_GRUPO=seu_chat_id_aqui
 ```
 
-### 5. Executando o Motor
-```bash
-python main.py
+### 3. Adapte para o seu perfil
+
+Abra o `main.py` e ajuste as constantes de perfil:
+
+```python
+# Termos que eliminam a vaga (tecnologias fora do seu stack)
+GAPS_ELIMINATORIOS = [
+    "flutter", "dart", ".net", "c#", ...
+]
+
+# Tecnologias do seu stack avançado (peso 2 no score)
+STACK_AVANCADO = [
+    "react", "vue", "typescript", ...
+]
+
+# Buscas por cargo e localização
+filtros_de_busca = [
+    {"nome": "FRONT END · SP", "params": {'state': 'São Paulo', 'jobName': 'front end', 'limit': 10}},
+    ...
+]
+```
+
+### 4. Configure o GitHub Actions
+
+No seu repositório GitHub, vá em **Settings → Secrets and variables → Actions** e adicione:
+
+| Secret | Descrição |
+|---|---|
+| `TELEGRAM_TOKEN` | Token do seu bot (via @BotFather) |
+| `CHAT_ID_GRUPO` | ID do grupo/canal do Telegram |
+
+---
+
+## 📸 Exemplo de alerta no Telegram
+
+```
+🟣 GUPY — FRONT END · SP
+
+💼 Vaga: Desenvolvedor Front-end React Pleno
+🏢 Empresa: Empresa X
+📍 Local: São Paulo - SP
+💻 Modelo: Híbrido
+📄 Tipo: Efetivo
+♿ PCD: Não informado
+📅 Data: 30/04/2026 às 09:15
+📊 Match: 🟢 Alto · REACT · TYPESCRIPT
+
+🔗 Clique aqui para aplicar
 ```
 
 ---
 
-## 📅 Agendamento Automático (Windows)
-Se você utiliza Windows, o repositório inclui um arquivo `rodar_gupy.bat`. Você pode usar o **Agendador de Tarefas do Windows** para rodar esse arquivo de hora em hora. O `.bat` já está configurado para forçar o encoding UTF-8 (evitando crash com emojis) e gerar um arquivo `erro_log.txt` para monitoramento.
+## 🙏 Créditos
+
+Projeto originalmente desenvolvido por **[Lucas Nunes](https://github.com/lucasnunestrabalho99-sudo)** — obrigado por tornar o código público e inspirar esta evolução.
 
 ---
-**Desenvolvido com ☕ por Lucas Nunes** | [LinkedIn](linkedin.com/in/lucas-nunes-da-silva-574604216)
+
+**Desenvolvido com ☕ por Paulo Marsiglia** | [LinkedIn](https://linkedin.com/in/paulomarsiglia) | [GitHub](https://github.com/pmarsiglia93)
