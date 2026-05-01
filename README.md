@@ -12,7 +12,7 @@
 
 Este projeto começou como um fork do excelente trabalho de [Lucas Nunes](https://github.com/lucasnunestrabalho99-sudo/telegram-vagas-gupy-bot), que criou um bot para monitorar vagas na Gupy para o Rio de Janeiro.
 
-Partindo dessa base, evoluí o projeto para atender minha própria realidade como desenvolvedor Front-End / Full Stack buscando oportunidades em **São Paulo e 100% Remoto**, adicionando múltiplas fontes, filtros de perfil e automação completa via GitHub Actions.
+Partindo dessa base, evoluí o projeto para atender minha própria realidade como Engenheiro de Software Mobile (Flutter) Sênior buscando oportunidades **100% Remoto no Brasil**, adicionando múltiplas fontes, filtros de perfil e automação completa via GitHub Actions.
 
 ---
 
@@ -26,8 +26,8 @@ Partindo dessa base, evoluí o projeto para atender minha própria realidade com
 | 🟤 **ProgramaThor** | Web Scraping | SP + Remoto |
 
 ### 🎯 Filtros inteligentes baseados em perfil
-- **Senioridade:** bloqueia automaticamente vagas Sênior, Especialista, Lead, Staff, Head, Coordenador
-- **Gaps eliminatórios:** bloqueia vagas com Flutter, Dart, .NET, C#, Kafka, Kubernetes, inglês fluente obrigatório, entre outros
+- **Senioridade:** o bot agora busca todas as senioridades, focado no nível Sênior (o antigo bloqueio foi removido).
+- **Gaps eliminatórios:** bloqueia vagas com PHP, Python, Node.js, React Native, KMP, modelo presencial, exigência de inglês fluente/avançado, entre outros.
 - **Vagas recentes:** limita a vagas publicadas nos últimos 3 dias
 - **Deduplicação dupla:** por URL (banco SQLite) + por título/empresa na sessão
 
@@ -90,17 +90,17 @@ Abra o `main.py` e ajuste as constantes de perfil:
 ```python
 # Termos que eliminam a vaga (tecnologias fora do seu stack)
 GAPS_ELIMINATORIOS = [
-    "flutter", "dart", ".net", "c#", ...
+    "php", "python", "react native", "presencial", ...
 ]
 
 # Tecnologias do seu stack avançado (peso 2 no score)
 STACK_AVANCADO = [
-    "react", "vue", "typescript", ...
+    "flutter", "dart", "clean architecture", ...
 ]
 
 # Buscas por cargo e localização
 filtros_de_busca = [
-    {"nome": "FRONT END · SP", "params": {'state': 'São Paulo', 'jobName': 'front end', 'limit': 10}},
+    {"nome": "FLUTTER · REMOTO", "params": {'workplaceTypes': 'remote', 'jobName': 'flutter', 'limit': 10}},
     ...
 ]
 ```
@@ -119,16 +119,16 @@ No seu repositório GitHub, vá em **Settings → Secrets and variables → Acti
 ## 📸 Exemplo de alerta no Telegram
 
 ```
-🟣 GUPY — FRONT END · SP
+🟣 GUPY — FLUTTER · REMOTO
 
-💼 Vaga: Desenvolvedor Front-end React Pleno
+💼 Vaga: Desenvolvedor Mobile Flutter Senior
 🏢 Empresa: Empresa X
-📍 Local: São Paulo - SP
-💻 Modelo: Híbrido
+📍 Local: Qualquer lugar (Remoto)
+💻 Modelo: Remoto
 📄 Tipo: Efetivo
 ♿ PCD: Não informado
 📅 Data: 30/04/2026 às 09:15
-📊 Match: 🟢 Alto · REACT · TYPESCRIPT
+📊 Match: 🟢 Alto · FLUTTER · DART · CLEAN ARCHITECTURE
 
 🔗 Clique aqui para aplicar
 ```
@@ -141,4 +141,4 @@ Projeto originalmente desenvolvido por **[Lucas Nunes](https://github.com/lucasn
 
 ---
 
-**Desenvolvido com ☕ por Paulo Marsiglia** | [LinkedIn](https://linkedin.com/in/paulomarsiglia) | [GitHub](https://github.com/pmarsiglia93)
+**Desenvolvido com ☕ por Carlos André Couto**

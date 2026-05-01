@@ -33,32 +33,20 @@ carregar_env()
 TOKEN   = os.getenv("TELEGRAM_TOKEN")
 CHAT_ID = os.getenv("CHAT_ID_GRUPO")
 
-# --- 2. PERFIL DE PAULO ---
-
-PALAVRAS_SENIOR = [
-    "sênior", "senior", "sênio", " sr ", " sr.", "(sr)", "sr|",
-    "especialista", "staff", "lead", "principal", "head", "arquiteto",
-    "architect", "manager", "gerente", "coordenador", "diretor",
-]
+# --- 2. PERFIL DE CARLOS ANDRÉ ---
 
 GAPS_ELIMINATORIOS = [
-    "flutter", "dart",
-    ".net", "c#", "dotnet", "asp.net",
-    "kafka", "kubernetes", "k8s",
-    "inglês fluente", "english fluent", "fluent english", "english required",
-    "kotlin", "swift",
+    "inglês avançado", "inglês fluente", "presencial", "php", "python",
+    "node.js", "node", "react native", "kmp", "sqs", "rabbitmq", "product manager",
+    "product owner", "vue.js", "vue js", "sales force", "react"
 ]
 
 STACK_AVANCADO = [
-    "react", "vue", "angular", "typescript", "javascript",
-    "vtex", "graphql", "tailwind", "sass", "scss", "vite",
-    "next.js", "nextjs", "next", "node", "express", "nestjs",
-    "python", "django", "laravel", "php",
+    "flutter", "dart", "clean architecture", "bloc", "firebase", "api rest", "apis rest", "flutter_test"
 ]
 
 STACK_INTERMEDIARIO = [
-    "postgresql", "mysql", "mongodb", "redis", "docker",
-    "jest", "react native", "expo", "spring boot", "java",
+    "devsecops", "micro front end", "testes de widget", "offline first", "finops"
 ]
 
 # Set em memória para evitar duplicatas na mesma execução (mesma vaga, fontes/buscas diferentes)
@@ -67,10 +55,6 @@ _enviados_sessao: set = set()
 def _chave_sessao(titulo: str, empresa: str) -> str:
     normalizar = lambda s: re.sub(r'[^a-z0-9]', '', s.lower())
     return normalizar(titulo)[:60] + "|" + normalizar(empresa)[:30]
-
-def is_senior(titulo):
-    t = titulo.lower()
-    return any(p in t for p in PALAVRAS_SENIOR)
 
 def tem_gap_eliminatorio(titulo):
     t = titulo.lower()
@@ -151,8 +135,6 @@ def registrar_e_enviar(conn, cursor, link, titulo, empresa, data_f, mensagem, fo
 
 def filtros_basicos(titulo):
     """Retorna (bloqueada, motivo) com os filtros de perfil."""
-    if is_senior(titulo):
-        return True, f"⏭️  Sênior: {titulo[:55]}"
     if tem_gap_eliminatorio(titulo):
         return True, f"🚫 Gap: {titulo[:55]}"
     return False, ""
@@ -170,10 +152,8 @@ def buscar_vagas_gupy(conn, cursor):
     url_api = "https://employability-portal.gupy.io/api/v1/jobs"
 
     filtros = [
-        {"nome": "FRONT END · SP",      "params": {'state': 'São Paulo',       'jobName': 'front end',  'limit': 10}},
-        {"nome": "FULL STACK · SP",     "params": {'state': 'São Paulo',       'jobName': 'full stack', 'limit': 10}},
-        {"nome": "FRONT END · REMOTO",  "params": {'workplaceTypes': 'remote', 'jobName': 'front end',  'limit': 10}},
-        {"nome": "FULL STACK · REMOTO", "params": {'workplaceTypes': 'remote', 'jobName': 'full stack', 'limit': 10}},
+        {"nome": "FLUTTER · REMOTO", "params": {'workplaceTypes': 'remote', 'jobName': 'flutter', 'limit': 10}},
+        {"nome": "MOBILE · REMOTO",  "params": {'workplaceTypes': 'remote', 'jobName': 'mobile',  'limit': 10}},
     ]
 
     for filtro in filtros:
@@ -203,10 +183,14 @@ def buscar_vagas_gupy(conn, cursor):
 
                     titulo  = vaga.get('name', 'Título Indisponível')
                     empresa = vaga.get('careerPageName', 'Empresa não informada')
-                    local   = "Qualquer lugar (Remoto)" if 'REMOTO' in filtro['nome'] else f"{vaga.get('city', 'SP')} - {vaga.get('state', 'SP')}"
+                    local   = "Qualquer lugar (Remoto)" if 'REMOTO' in filtro['nome'] else f"{vaga.get('city', 'Não informado')} - {vaga.get('state', 'Não informado')}"
                     modelo  = TRADUCAO_MODELO.get(vaga.get('workplaceType', ''), "Não informado")
                     tipo    = TRADUCAO_TIPO_VAGA.get(vaga.get('type', ''), "Outros")
                     pcd     = "Sim" if vaga.get('disabilities') else "Não informado"
+
+                    pais    = vaga.get('country', '')
+                    if pais and pais.lower() not in ['brasil', 'brazil', 'br']:
+                        continue
 
                     data_iso = vaga.get('publishedDate', '')
                     try:
@@ -260,8 +244,6 @@ def buscar_vagas_gupy(conn, cursor):
 
 # --- 5. PROGRAMATHOR ---
 
-NIVEL_SENIOR_PT = ['sênior', 'senior', 'sr', 'especialista', 'staff', 'lead', 'principal', 'head']
-
 def buscar_vagas_programathor(conn, cursor):
     if not BS4_DISPONIVEL:
         print("\n⚠️  ProgramaThor desativado: instale beautifulsoup4")
@@ -276,10 +258,8 @@ def buscar_vagas_programathor(conn, cursor):
     }
 
     filtros = [
-        {"nome": "FRONT END · SP",      "termo": "front end",  "local_filtro": "sp"},
-        {"nome": "FULL STACK · SP",     "termo": "full stack", "local_filtro": "sp"},
-        {"nome": "FRONT END · REMOTO",  "termo": "front end",  "local_filtro": "remoto"},
-        {"nome": "FULL STACK · REMOTO", "termo": "full stack", "local_filtro": "remoto"},
+        {"nome": "FLUTTER · REMOTO", "termo": "flutter", "local_filtro": "remoto"},
+        {"nome": "MOBILE · REMOTO",  "termo": "mobile",  "local_filtro": "remoto"},
     ]
 
     for filtro in filtros:
@@ -333,10 +313,7 @@ def buscar_vagas_programathor(conn, cursor):
                     if filtro["local_filtro"] == "remoto" and "remoto" not in local_lower:
                         continue
 
-                    # Filtro de senioridade: campo explícito do card + título
-                    if any(s in nivel.lower() for s in NIVEL_SENIOR_PT) or is_senior(titulo):
-                        print(f"   ⏭️  Sênior: {titulo[:55]}")
-                        continue
+                    # (Removido filtro de Sênior)
 
                     # Gaps nos tags de tecnologia
                     if tem_gap_eliminatorio(titulo) or any(tem_gap_eliminatorio(t) for t in tags):
@@ -393,10 +370,8 @@ def buscar_vagas_linkedin(conn, cursor):
 
     # f_TPR=r259200 → últimos 3 dias | f_WT=2 → remoto
     filtros = [
-        {"nome": "FRONT END · SP",      "params": {"keywords": "desenvolvedor front end", "location": "São Paulo, Brazil", "f_TPR": "r259200", "start": 0}},
-        {"nome": "FULL STACK · SP",     "params": {"keywords": "desenvolvedor full stack", "location": "São Paulo, Brazil", "f_TPR": "r259200", "start": 0}},
-        {"nome": "FRONT END · REMOTO",  "params": {"keywords": "desenvolvedor front end",  "f_WT": "2", "f_TPR": "r259200", "start": 0}},
-        {"nome": "FULL STACK · REMOTO", "params": {"keywords": "desenvolvedor full stack",  "f_WT": "2", "f_TPR": "r259200", "start": 0}},
+        {"nome": "FLUTTER · REMOTO", "params": {"keywords": "flutter", "location": "Brazil", "f_WT": "2", "f_TPR": "r259200", "start": 0}},
+        {"nome": "MOBILE · REMOTO",  "params": {"keywords": "mobile",  "location": "Brazil", "f_WT": "2", "f_TPR": "r259200", "start": 0}},
     ]
 
     for filtro in filtros:
