@@ -38,15 +38,24 @@ CHAT_ID = os.getenv("CHAT_ID_GRUPO")
 GAPS_ELIMINATORIOS = [
     "inglês avançado", "inglês fluente", "presencial", "php", "python",
     "node.js", "node", "react native", "kmp", "sqs", "rabbitmq", "product manager",
-    "product owner", "vue.js", "vue js", "sales force", "react"
+    "product owner", "vue.js", "vue js", "salesforce", "sales force", "react", "apex", 
+    "kubernetes", "kafka", "dot net", ".net", "ruby", "go", "ruby on rails", "java", "angular", "typescript",
 ]
 
 STACK_AVANCADO = [
-    "flutter", "dart", "clean architecture", "bloc", "firebase", "api rest", "apis rest", "flutter_test"
+    "flutter", "dart", "clean architecture", "bloc", "cubit", "provider", "riverpod", "getx", "mobx",
+    "firebase", "crashlytics", "remote config", "firebase performance", "firebase authentication",
+    "onesignal", "cloud messaging", "api rest", "apis rest", "rest apis", "restful", "graphql", "dio", "retrofit",
+    "flutter_test", "mocktail", "mockito", "tdd", "code coverage", "solid", "design patterns", "mvvm", "ddd",
+    "cross-platform", "cross platform", "android", "ios", "kotlin", "swift",
+    "codemagic", "github actions", "bitrise", "fastlane", "gitflow",
+    "sqlite", "isar", "hive", "sharedpreferences", "fluttersecurestorage",
+    "tech lead", "agile", "scrum", "kanban", "mentoria", "code review"
 ]
 
 STACK_INTERMEDIARIO = [
-    "devsecops", "micro front end", "testes de widget", "offline first", "finops"
+    "devsecops", "micro front end", "testes de widget", "widget tests", "integration tests",
+    "offline first", "finops", "ci/cd", "mysql", "banco de dados", "docker", "figma"
 ]
 
 # Set em memória para evitar duplicatas na mesma execução (mesma vaga, fontes/buscas diferentes)
