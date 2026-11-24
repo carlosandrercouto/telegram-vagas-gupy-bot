@@ -103,7 +103,8 @@ EMPRESAS_INHIRE = [
     'semantix',
     'mazzatech',
     'cappta',
-    'nstech'
+    'nstech',
+    'somosed'
 ]
 
 # Solides: busca por título.
@@ -125,12 +126,13 @@ DIAS_BUSCA_SOLIDES = 20  # Solides → padrão: 20 dias
 # Qualquer termo abaixo encontrado no título da vaga a elimina da lista.
 # Use letras minúsculas — a busca é case-insensitive.
 GAPS_ELIMINATORIOS = [
-    "inglês avançado", "inglês fluente", "presencial", "php", "python",
+    "presencial", "php", "python",
     "node.js", "node", "sqs", "rabbitmq", "product manager",
     "product owner", "vue.js", "java", "vue js", "salesforce", "sales force", "react", "apex",
     "kubernetes", "kafka", "dot net", ".net", "ruby", "go", "ruby on rails", "angular", "product designer",
     "tester", "quality assurance", "analista de testes", "qa", "fullstack", "maker", "CRO", "ux designer","typescript", "adsales", "marketing",
-    "bi analyst", "offshore", "automation", "cobol", "mainframe", "head of sales", "ai developer", "editor de vídeo"
+    "bi analyst", "offshore", "automation", "cobol", "mainframe", "head of sales", "ai developer", "editor de vídeo", "analista de dados", 
+    "pedreiro", "motorista", "tratorista", "operador de equipamento"
 ]
 
 # Vagas dessas empresas são ignoradas em todas as fontes.
